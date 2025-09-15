@@ -16,16 +16,18 @@ export default function RegisterPage() {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/register`, {
         method: "POST",
         body: JSON.stringify(form),
         headers: { "Content-Type": "application/json" },
       })
 
       if (res.ok) {
-        toast.success("🎉 Account created! You can log in now.")
-        router.push("/login")
-      } else {
+  const data = await res.json()
+  localStorage.setItem("token", data.token) // optional if backend returns JWT
+  toast.success("🎉 Account created! You can log in now.")
+  router.push("/login")
+} else {
         const data = await res.json().catch(() => ({}))
         toast.error(data?.message || "❌ Registration failed. Try again.")
       }

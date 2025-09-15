@@ -15,18 +15,21 @@ export default function LoginPage() {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, {
         method: "POST",
-        body: JSON.stringify(form),
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       })
 
+      const data = await res.json()
+
       if (res.ok) {
-        toast.success("Welcome back!")   // ✅ correct usage
+        // ✅ Save JWT in localStorage
+        localStorage.setItem("token", data.token)
+        toast.success("Welcome back!")
         router.push("/")
       } else {
-        const data = await res.json().catch(() => ({}))
-        toast.error(data?.message || "Invalid credentials")  // ✅ correct usage
+        toast.error(data?.message || "Invalid credentials")
       }
     } catch (err) {
       toast.error("Network error. Please try again.")
@@ -34,7 +37,6 @@ export default function LoginPage() {
       setLoading(false)
     }
   }
-
 
   return (
     <main className="min-h-dvh w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
