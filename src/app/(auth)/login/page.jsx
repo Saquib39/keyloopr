@@ -15,7 +15,7 @@ export default function LoginPage() {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, {
+      const res = await fetch('/api/auth/login', {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

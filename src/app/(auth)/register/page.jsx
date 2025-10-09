@@ -16,7 +16,7 @@ export default function RegisterPage() {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/register`, {
+      const res = await fetch('/api/auth/register', {
         method: "POST",
         body: JSON.stringify(form),
         headers: { "Content-Type": "application/json" },
