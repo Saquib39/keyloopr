@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# KeyLoopr 🔐
 
-## Getting Started
+A modern, secure API key management platform built with Next.js 15. KeyLoopr provides a beautiful dark-themed interface for managing, organizing, and securing your API keys across multiple projects with team collaboration features.
 
-First, run the development server:
+## 🚀 Tech Stack
+
+**Frontend:** Next.js 15 (App Router), React 18, Tailwind CSS v4, Framer Motion  
+**UI Components:** shadcn/ui, Lucide React  
+**Fonts:** Geist Sans & Geist Mono  
+**Deployment:** Vercel  
+
+## ✨ Features
+
+🔑 **Secure API Key Management**
+- Store and manage API keys with encryption
+- Organize keys by projects
+- Quick search and filter across all keys
+- Track key usage and statistics
+
+👥 **Team Collaboration**
+- Invite team members to projects
+- Role-based access control (Owner, Admin, Editor, Viewer)
+- Manage member permissions
+- Accept/decline project invitations
+
+📊 **Dashboard & Analytics**
+- Overview of all projects at a glance
+- Track recent activities
+- View project statistics (keys, members, status)
+- Advanced search and filtering
+
+🎨 **Beautiful Dark UI**
+- Stunning dark theme with blue-to-purple gradients
+- Smooth Framer Motion animations
+- Fully responsive design
+- Glass morphism effects
+- Toast notifications
+- Parallax scrolling effects
+
+🔐 **Secure Authentication**
+- User login and registration
+- Protected dashboard routes
+- Session management
+
+## 🌐 Live Demo
+
+
+🔗 [keyloopr-three.vercel.app](https://keyloopr.vercel.app/)
+
+## 🛠️ Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Saquib39/keyloopr.git
+cd keyloopr
+```
+
+### 2. Install Dependencies
+
+Use the following command to install all necessary packages:
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env.local` file in the root directory of the project and add the following:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jsonwebtoken_secret_string
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+🔐 **Note:** Never commit this file to GitHub. It contains sensitive data and should be listed in `.gitignore`.
+
+### 4. Run the Application Locally
+
+Once everything is set up, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## ✅ You're All Set!
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You're now ready to explore, develop, and test KeyLoopr locally. For any contribution, feature request, or issue — feel free to fork and submit a pull request!
