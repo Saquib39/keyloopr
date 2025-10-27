@@ -21,7 +21,7 @@ export default function RegisterPage() {
         body: JSON.stringify(form),
         headers: { "Content-Type": "application/json" },
       })
-
+      console.log("Registration response:", res)
       if (res.ok) {
   const data = await res.json()
   localStorage.setItem("token", data.token) // optional if backend returns JWT

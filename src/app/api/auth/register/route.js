@@ -9,12 +9,12 @@ export async function POST(req) {
 
   const existing = await User.findOne({ username });
   if (existing) {
-    return new Response("Username already taken", { status: 400 });
+    return Response.json({ message: "Username already taken" }, { status: 400 });
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const newUser = new User({ username, password: hashedPassword });
   await newUser.save();
 
-  return new Response("User registered", { status: 201 });
+  return Response.json({ message: "User registered successfully" }, { status: 201 });
 }
