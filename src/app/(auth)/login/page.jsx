@@ -1,43 +1,48 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { toast } from "react-toastify"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 
 export default function LoginPage() {
-  const [form, setForm] = useState({ username: "", password: "" })
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+
     try {
-      setLoading(true)
-      const res = await fetch('/api/auth/login', {
+      setLoading(true);
+
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
         credentials: "include",
-      })
+        body: JSON.stringify(form),
+      });
 
-      const data = await res.json()
+      const data = await res.json();
 
-      if (res.ok) {
-        // ✅ Save JWT in localStorage
-        localStorage.setItem("token", data.token)
-        toast.success("Welcome back!")
-        router.push("/dashboard")
-      } else {
-        toast.error(data?.message || "Invalid credentials")
+      if (!res.ok) {
+        toast.error(data?.message || "Invalid credentials");
+        return;
       }
+
+      toast.success("Welcome back!");
+
+      // 🔥 MAIN FIX (SERVER KO NEW COOKIE MILTI HAI)
+      router.refresh();
+      router.push("/dashboard");
+
     } catch (err) {
-      toast.error("Network error. Please try again.")
+      toast.error("Network error. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="min-h-dvh w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
