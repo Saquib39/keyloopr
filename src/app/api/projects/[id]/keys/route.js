@@ -1,15 +1,14 @@
-// ===== 📁 app/api/projects/[id]/keys/route.js =====
-
 import { connectDB } from "@/lib/db";
 import { getUserFromCookie } from "@/lib/auth";
 import { Project } from "@/models/ProjectModel";
+import { encryptSecret, decryptSecret } from "@/lib/crypto";
 
 export async function POST(req, { params }) {
   await connectDB();
   const user = await getUserFromCookie();
   if (!user) return new Response("Unauthorized", { status: 401 });
 
-  const { id } = await params; 
+  const { id } =await params; 
   const { name, key, value, type, description } = await req.json();
 
   const project = await Project.findById(id);
@@ -23,7 +22,10 @@ export async function POST(req, { params }) {
   if (!isOwner && !isEditor)
     return new Response("Not authorized", { status: 403 });
 
-  project.keys.push({ name, key, value, type, description, createdBy: user._id });
+  // 🔒 Encrypt the value before saving
+  const encryptedValue = encryptSecret(value);
+
+  project.keys.push({ name, key, value: encryptedValue, type, description, createdBy: user._id });
 
   project.activity.push({
     message: `${user.username} added a new key "${name}"`,
@@ -32,16 +34,25 @@ export async function POST(req, { params }) {
 
   await project.save();
 
-  return Response.json({ success: true, project });
+  return new Response(JSON.stringify({ success: true, project }), {
+    status: 200,
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 export async function GET(_, { params }) {
   await connectDB();
-  const { id } = await params; // ✅ FIX: await params
+  const { id } = await params;
   const project = await Project.findById(id);
   if (!project) return new Response("Project not found", { status: 404 });
 
-  return new Response(JSON.stringify(project.keys), {
+  // 🔓 Decrypt before sending
+  const decryptedKeys = project.keys.map((k) => ({
+    ...k.toObject(),
+    value: k.value ? decryptSecret(k.value) : "",
+  }));
+
+  return new Response(JSON.stringify(decryptedKeys), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   });

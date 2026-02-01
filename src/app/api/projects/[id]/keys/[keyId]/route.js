@@ -3,7 +3,7 @@ import { getUserFromCookie } from "@/lib/auth";
 import { Project } from "@/models/ProjectModel";
 
 export async function PATCH(req, { params }) {
-  const { id, keyId } = params; // yahan await ki zarurat nahi
+  const { id, keyId } = params; 
   await connectDB();
   const user = await getUserFromCookie();
   if (!user) return new Response("Unauthorized", { status: 401 });
