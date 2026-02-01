@@ -27,7 +27,7 @@ export default function LoginPage() {
         // ✅ Save JWT in localStorage
         localStorage.setItem("token", data.token)
         toast.success("Welcome back!")
-        router.push("/")
+        router.push("/dashboard")
       } else {
         toast.error(data?.message || "Invalid credentials")
       }
