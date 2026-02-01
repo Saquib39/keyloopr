@@ -43,13 +43,14 @@ export async function POST(req, { params }) {
 export async function GET(_, { params }) {
   await connectDB();
   const { id } = await params;
+
   const project = await Project.findById(id);
   if (!project) return new Response("Project not found", { status: 404 });
 
-  // 🔓 Decrypt before sending
+  // 🔓 Decrypt each key safely
   const decryptedKeys = project.keys.map((k) => ({
     ...k.toObject(),
-    value: k.value ? decryptSecret(k.value) : "",
+    value: decryptSecret(k.value), // safe decrypt
   }));
 
   return new Response(JSON.stringify(decryptedKeys), {
