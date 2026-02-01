@@ -26,35 +26,38 @@ export default function Dashboard() {
 
   // ✅ Check login
   useEffect(() => {
-  const checkLogin = async () => {
-    try {
-      const res = await fetch("/api/auth/me", { credentials: "include" })
-      const data = await res.json()
+    const checkLogin = async () => {
+      try {
+        const res = await fetch("/api/auth/me", { 
+          credentials: "include", 
+          cache: "no-store" 
+        })
+        const data = await res.json()
 
-      if (data.isLoggedIn) {
-        setIsLoggedIn(true)
-      } else {
-        router.push("/login")
+        if (data.isLoggedIn) {
+          setIsLoggedIn(true)
+        } else {
+          setIsLoggedIn(false)
+        }
+      } catch {
+        setIsLoggedIn(false)
+      } finally {
+        setCheckingAuth(false)
       }
-    } catch {
-      router.push("/login")
-    } finally {
-      setCheckingAuth(false)
     }
-  }
 
-  checkLogin()
-}, [])
+    checkLogin()
+  }, [])
 
   // ✅ Fetch dashboard data (only if logged in)
   useEffect(() => {
     if (!isLoggedIn) return
     async function fetchData() {
-      const projectsRes = await fetch("/api/projects")
+      const projectsRes = await fetch("/api/projects", { cache: "no-store" })
       const projectsData = projectsRes.ok ? await projectsRes.json() : []
       setProjects(projectsData)
 
-      const activitiesRes = await fetch("/api/activities")
+      const activitiesRes = await fetch("/api/activities", { cache: "no-store" })
       const activitiesData = activitiesRes.ok ? await activitiesRes.json() : []
       setActivities(activitiesData)
     }
@@ -71,13 +74,18 @@ export default function Dashboard() {
     }
   }, [searchTerm, projects])
 
+  // ✅ Prevent flicker
   if (!mounted || checkingAuth) return null
+  if (!isLoggedIn) {
+    router.push("/login")
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
       <div className="flex">
         <motion.main
-          className={`flex-1 transition-all duration-300 `}
+          className="flex-1 transition-all duration-300"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
