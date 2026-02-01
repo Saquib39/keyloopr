@@ -16,6 +16,7 @@ export default function Dashboard() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filteredProjects, setFilteredProjects] = useState([])
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [checkingAuth, setCheckingAuth] = useState(true)
   const [mounted, setMounted] = useState(false)
 
   // ✅ Hydration fix
@@ -25,22 +26,25 @@ export default function Dashboard() {
 
   // ✅ Check login
   useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        const res = await fetch("/api/auth/me", { credentials: "include" })
-        if (!res.ok) throw new Error("Not logged in")
-        const data = await res.json()
-        if (!data.isLoggedIn) {
-          router.push("/login")
-        } else {
-          setIsLoggedIn(true)
-        }
-      } catch {
+  const checkLogin = async () => {
+    try {
+      const res = await fetch("/api/auth/me", { credentials: "include" })
+      const data = await res.json()
+
+      if (data.isLoggedIn) {
+        setIsLoggedIn(true)
+      } else {
         router.push("/login")
       }
+    } catch {
+      router.push("/login")
+    } finally {
+      setCheckingAuth(false)
     }
-    checkLogin()
-  }, [router])
+  }
+
+  checkLogin()
+}, [])
 
   // ✅ Fetch dashboard data (only if logged in)
   useEffect(() => {
@@ -67,7 +71,7 @@ export default function Dashboard() {
     }
   }, [searchTerm, projects])
 
-  if (!mounted) return null // ✅ Prevent hydration issues
+  if (!mounted || checkingAuth) return null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">

@@ -17,20 +17,34 @@ export async function POST(req) {
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    return NextResponse.json({ message: "Invalid credentials" }, { status: 401 });
+    return NextResponse.json(
+      { message: "Invalid credentials" },
+      { status: 401 },
+    );
   }
 
   const token = createToken(user._id);
 
   const response = NextResponse.json(
-    { message: "Login successful", user: { _id: user._id, username: user.username } },
-    { status: 200 }
+    {
+      message: "Login successful",
+      user: { _id: user._id, username: user.username },
+    },
+    { status: 200 },
   );
+
+  // response.cookies.set("token", token, {
+  //   httpOnly: true,
+  //   path: "/",
+  //   maxAge: 7 * 24 * 60 * 60, // 7 days
+  // });
 
   response.cookies.set("token", token, {
     httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
     path: "/",
-    maxAge: 7 * 24 * 60 * 60, // 7 days
+    maxAge: 7 * 24 * 60 * 60,
   });
 
   return response;

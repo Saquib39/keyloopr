@@ -1,42 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { motion } from "framer-motion"
-import { toast, ToastContainer } from "react-toastify"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { toast, ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css"
 
 export default function RegisterPage() {
-  const [form, setForm] = useState({ username: "", password: "" })
-  const [loading, setLoading] = useState(false)
-  const router = useRouter()
+  const [form, setForm] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      setLoading(true)
-      const res = await fetch('/api/auth/register', {
+      setLoading(true);
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify(form),
         headers: { "Content-Type": "application/json" },
-      })
-      console.log("Registration response:", res)
+      });
+      console.log("Registration response:", res);
       if (res.ok) {
-  const data = await res.json()
-  localStorage.setItem("token", data.token) // optional if backend returns JWT
-  toast.success("🎉 Account created! You can log in now.")
-  router.push("/login")
-} else {
-        const data = await res.json().catch(() => ({}))
-        toast.error(data?.message || "❌ Registration failed. Try again.")
+        const data = await res.json();
+        localStorage.setItem("token", data.token); // optional if backend returns JWT
+        toast.success("🎉 Account created! You can log in now.");
+        router.push("/login");
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data?.message || "❌ Registration failed. Try again.");
       }
     } catch (err) {
-      toast.error("⚠️ Network error, please try again.")
+      toast.error("⚠️ Network error, please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <main className="min-h-dvh w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
@@ -54,7 +54,9 @@ export default function RegisterPage() {
             <h1 className="text-3xl font-semibold tracking-tight text-white text-balance">
               Create your KeyLoopr account
             </h1>
-            <p className="mt-2 text-sm text-gray-400">Securely manage your API keys with confidence.</p>
+            <p className="mt-2 text-sm text-gray-400">
+              Securely manage your API keys with confidence.
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -97,7 +99,9 @@ export default function RegisterPage() {
               type="submit"
               className="group relative mt-2 inline-flex w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-2.5 font-medium text-white transition disabled:opacity-70"
             >
-              <span className="relative">{loading ? "Creating..." : "Create account"}</span>
+              <span className="relative">
+                {loading ? "Creating..." : "Create account"}
+              </span>
             </motion.button>
           </form>
 
@@ -111,12 +115,15 @@ export default function RegisterPage() {
                 Login
               </Link>
             </div>
-            <Link href="/" className="text-gray-400 hover:text-gray-200 transition">
+            <Link
+              href="/"
+              className="text-gray-400 hover:text-gray-200 transition"
+            >
               Back to Home
             </Link>
           </div>
         </motion.div>
       </section>
     </main>
-  )
+  );
 }
