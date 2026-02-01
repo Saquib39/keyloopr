@@ -75,11 +75,11 @@ export default function Dashboard() {
   }, [searchTerm, projects])
 
  
-  // if (!mounted || checkingAuth) return null
-  // if (!isLoggedIn) {
-  //   router.push("/login")
-  //   return null
-  // }
+  if (!mounted || checkingAuth) return null
+  if (!isLoggedIn) {
+    router.push("/login")
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
